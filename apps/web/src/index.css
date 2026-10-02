@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f4f1ea;
+  --surface: #faf8f3;
+  --ink: #171717;
+  --muted: #6b6b65;
+  --line: #d8d4ca;
+  --accent: #b56a32;
+  --teal: #55706b;
+}
+.dark {
+  --paper: #151515;
+  --surface: #1d1d1b;
+  --ink: #eceae4;
+  --muted: #a8a59d;
+  --line: #353530;
+  --accent: #c47a3a;
+  --teal: #86aaa3;
+}
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.grid-texture {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-in { animation: fade-in 180ms ease-out both; }
+@media (prefers-reduced-motion: reduce) { .fade-in { animation: none; } }
