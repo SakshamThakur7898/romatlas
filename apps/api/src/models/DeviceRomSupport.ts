@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { BUILD_TYPE, SUPPORT_TYPE, VERIFICATION } from './enums';
+import { BUILD_TYPE, LIFECYCLE, SUPPORT_TYPE, VERIFICATION } from './enums';
 import { httpUrl } from './schemaTypes';
 
 const supportSchema = new Schema(
@@ -7,6 +7,8 @@ const supportSchema = new Schema(
     deviceId: { type: Schema.Types.ObjectId, ref: 'Device', required: true },
     romId: { type: Schema.Types.ObjectId, ref: 'Rom', required: true },
     supportType: { type: String, enum: SUPPORT_TYPE, required: true },
+    // Is the project still building for this device? Taken from the source's own data, else UNKNOWN.
+    lifecycle: { type: String, enum: LIFECYCLE, default: 'UNKNOWN' },
     androidVersion: { type: String, required: true, trim: true },
     buildType: { type: String, enum: BUILD_TYPE },
     sourceUrl: { ...httpUrl, required: true },

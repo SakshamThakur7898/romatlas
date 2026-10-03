@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { SupportWithDevice, SupportWithRom } from '../lib/types';
-import { ExternalLink, Mono, SupportBadge, VerificationBadge } from './ui';
+import { ExternalLink, LifecycleBadge, Mono, SupportBadge, VerificationBadge } from './ui';
 
 type Row =
   | { kind: 'rom'; s: SupportWithRom }
@@ -42,7 +42,7 @@ export function CompatibilityTable({ rows, firstColumn }: { rows: Row[]; firstCo
                 {sub(r) && <div className="text-xs text-muted">{sub(r)}</div>}
               </td>
               <td className="py-3 pr-4"><Mono>{r.s.androidVersion}</Mono></td>
-              <td className="py-3 pr-4"><SupportBadge type={r.s.supportType} /></td>
+              <td className="py-3 pr-4"><span className="flex flex-wrap gap-1"><SupportBadge type={r.s.supportType} /><LifecycleBadge value={r.s.lifecycle} /></span></td>
               <td className="py-3 pr-4"><VerificationBadge status={r.s.verificationStatus} lastVerifiedAt={r.s.lastVerifiedAt} /></td>
               <td className="py-3"><ExternalLink href={r.s.sourceUrl}>Source</ExternalLink></td>
             </tr>
@@ -61,6 +61,7 @@ export function CompatibilityTable({ rows, firstColumn }: { rows: Row[]; firstCo
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <SupportBadge type={r.s.supportType} />
+              <LifecycleBadge value={r.s.lifecycle} />
               <VerificationBadge status={r.s.verificationStatus} lastVerifiedAt={r.s.lastVerifiedAt} />
             </div>
             <div className="mt-2 text-sm"><ExternalLink href={r.s.sourceUrl}>Open source</ExternalLink></div>

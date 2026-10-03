@@ -27,6 +27,11 @@ export function SupportBadge({ type }: { type: SupportType }) {
   return <Badge tone={type === 'OFFICIAL' ? 'ok' : 'muted'}>{type}</Badge>;
 }
 
+export function LifecycleBadge({ value }: { value?: 'ACTIVE' | 'DISCONTINUED' | 'UNKNOWN' }) {
+  if (!value || value === 'UNKNOWN') return null;
+  return <Badge tone={value === 'ACTIVE' ? 'ok' : 'warn'}>{value === 'ACTIVE' ? 'Active' : 'Discontinued'}</Badge>;
+}
+
 export function StatusBadge({ status }: { status: string }) {
   const tone: Tone = status === 'ACTIVE' ? 'ok' : status === 'DISCONTINUED' ? 'warn' : 'muted';
   return <Badge tone={tone}>{status}</Badge>;
@@ -50,6 +55,24 @@ export function ExternalLink({ href, children }: { href?: string | null; childre
     </a>
   );
 }
+
+export const inputClass =
+  'h-10 w-full rounded border border-line bg-surface px-3 text-sm outline-none transition-colors duration-150 focus:border-accent';
+
+export function Field({ label, error, children }: { label: string; error?: string; children: ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1 block font-mono text-xs uppercase tracking-wide text-muted">{label}</span>
+      {children}
+      {error && <span role="alert" className="mt-1 block text-xs text-accent">{error}</span>}
+    </label>
+  );
+}
+
+export const buttonClass =
+  'inline-flex h-9 items-center gap-2 rounded border border-line px-3 text-sm transition-colors duration-150 enabled:hover:border-accent enabled:hover:text-accent disabled:opacity-50';
+export const primaryButtonClass =
+  'inline-flex h-10 items-center justify-center rounded bg-ink px-4 text-sm font-medium text-paper transition-opacity duration-150 enabled:hover:opacity-85 disabled:opacity-50';
 
 export function SectionTitle({ children }: { children: ReactNode }) {
   return <h2 className="mb-3 border-b border-line pb-2 font-mono text-xs uppercase tracking-widest text-muted">{children}</h2>;

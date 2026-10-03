@@ -49,6 +49,7 @@ deviceSchema.pre('validate', function () {
 });
 
 deviceSchema.index({ brandSlug: 1, slug: 1 }, { unique: true });
+deviceSchema.index({ brandSlug: 1, codename: 1 }, { unique: true });
 deviceSchema.index({ codename: 1 });
 deviceSchema.index({ modelNumbers: 1 });
 deviceSchema.index({ aliases: 1 });

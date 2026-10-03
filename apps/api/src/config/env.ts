@@ -7,12 +7,17 @@ const DEV_REFRESH_SECRET = 'dev-refresh-secret-change-in-prod-min32!';
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
-  MONGODB_URI: z.string().min(1).default('mongodb://localhost:27017/romatlas'),
+  MONGODB_URI: z.string().min(1).default('mongodb+srv://saksham:saksham123%40@romatlas.0uzdjbl.mongodb.net/romatlas?appName=romatlas'),
   CLIENT_ORIGIN: z.string().url().default('http://localhost:5173'),
   JWT_SECRET: z.string().min(32).default(DEV_ACCESS_SECRET),
   JWT_REFRESH_SECRET: z.string().min(32).default(DEV_REFRESH_SECRET),
   JWT_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
+  SYNC_ENABLED: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
+  SYNC_INTERVAL_HOURS: z.coerce.number().positive().default(24),
+  SYNC_CACHE_DIR: z.string().default('.cache'),
+  GOOGLE_DEVICES_URL: z.string().url().default('https://storage.googleapis.com/play_public/supported_devices.csv'),
+  LINEAGE_WIKI_REPO: z.string().url().default('https://github.com/LineageOS/lineage_wiki.git'),
   NIM_API_KEY: z.string().optional(),
   NIM_BASE_URL: z.string().url().default('https://integrate.api.nvidia.com/v1'),
   NIM_MODEL: z.string().default('nvidia/llama-3.1-nemotron-70b-instruct'),
@@ -20,7 +25,6 @@ const schema = z.object({
 
 export const env = schema.parse(process.env);
 
-// The dev defaults above exist only so local development works with zero setup.
 if (
   env.NODE_ENV === 'production' &&
   (env.JWT_SECRET === DEV_ACCESS_SECRET ||

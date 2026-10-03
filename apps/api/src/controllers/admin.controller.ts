@@ -2,14 +2,16 @@ import type { RequestHandler } from 'express';
 import { Types } from 'mongoose';
 import {
   DeviceModel, RomModel, GuideModel, RecoveryModel, KernelModel, SourceModel, UpdateEventModel,
-  UserModel, ReportModel, SubmissionModel, AuditLogModel,
+  UserModel, ReportModel, SubmissionModel, AuditLogModel, SyncJobModel,
 } from '../models';
 import { AppError } from '../utils/errors';
 import { ok, paginate } from '../utils/response';
 import {
-  paginationQuerySchema, reportResolveSchema, roleChangeSchema, sourceUpdateSchema, submissionReviewSchema,
+  paginationQuerySchema, reportResolveSchema, roleChangeSchema, sourceUpdateSchema, submissionReviewSchema, syncTriggerSchema,
 } from '../validators/schemas';
 import { writeAudit } from '../services/audit.service';
+import { runAllSyncJobs, runSyncJob, SYNC_ORDER } from '../services/sync.service';
+import { logger } from '../utils/logger';
 
 export const getStats: RequestHandler = async (_req, res) => {
   const [devices, roms, guides, recoveries, kernels, sources, updates, users, openReports, pendingSubmissions] =
@@ -144,6 +146,30 @@ export const listAuditLogs: RequestHandler = async (req, res) => {
     AuditLogModel.find().sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit)
       .populate('actorId', 'name username role').lean(),
     AuditLogModel.estimatedDocumentCount(),
+  ]);
+  res.json(paginate(data, total, page, limit));
+};
+
+export const triggerSync: RequestHandler = async (req, res) => {
+  const { job, force } = syncTriggerSchema.parse(req.body ?? {});
+  const names = job === 'all' ? SYNC_ORDER : [job];
+  const running = await SyncJobModel.exists({ status: 'RUNNING', startedAt: { $gt: new Date(Date.now() - 30 * 60_000) } });
+  if (running) throw new AppError(409, 'SYNC_RUNNING', 'A sync is already running');
+
+  const triggeredBy = String(res.locals.userId);
+  // Imports can take minutes: run in the background and let the client poll /sync/history.
+  const work = job === 'all' ? runAllSyncJobs({ force, triggeredBy }) : runSyncJob(job, { force, triggeredBy });
+  void Promise.resolve(work).catch((err) => logger.error({ err }, 'background sync failed'));
+
+  await writeAudit({ actorId: res.locals.userId, action: 'SYNC_TRIGGERED', newValue: { job, force } });
+  res.status(202).json(ok({ started: names, force }));
+};
+
+export const syncHistory: RequestHandler = async (req, res) => {
+  const { page, limit } = paginationQuerySchema.parse(req.query);
+  const [data, total] = await Promise.all([
+    SyncJobModel.find().sort({ startedAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+    SyncJobModel.estimatedDocumentCount(),
   ]);
   res.json(paginate(data, total, page, limit));
 };

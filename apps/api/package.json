@@ -7,6 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "seed": "tsx src/scripts/seed.ts",
+    "sync": "tsx src/scripts/sync.ts",
     "typecheck": "tsc -p tsconfig.test.json",
     "test": "vitest run"
   },
@@ -20,6 +21,7 @@
     "express": "^5.0.1",
     "express-rate-limit": "^7.4.1",
     "helmet": "^8.0.0",
+    "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.7.2",
     "openai": "^7.25.0",

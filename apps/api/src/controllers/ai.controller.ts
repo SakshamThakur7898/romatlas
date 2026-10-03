@@ -78,7 +78,7 @@ async function buildContext(device: NonNullable<Awaited<ReturnType<typeof resolv
       addSource(`${rom?.name ?? 'ROM'} download`, s.downloadUrl);
       addSource(`${rom?.name ?? 'ROM'} documentation`, s.documentationUrl);
       return {
-        rom: rom?.name, supportType: s.supportType, androidVersion: s.androidVersion, buildType: s.buildType,
+        rom: rom?.name, supportType: s.supportType, androidVersion: s.androidVersion, buildType: s.buildType, lifecycle: s.lifecycle,
         verificationStatus: s.verificationStatus, lastVerifiedAt: s.lastVerifiedAt, lastBuildDate: s.lastBuildDate,
         maintainer: s.maintainer, knownIssues: s.knownIssues, sourceUrl: s.sourceUrl, downloadUrl: s.downloadUrl,
         documentationUrl: s.documentationUrl,

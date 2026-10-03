@@ -38,6 +38,7 @@ export interface Rom {
 interface SupportBase {
   _id: string;
   supportType: SupportType;
+  lifecycle?: 'ACTIVE' | 'DISCONTINUED' | 'UNKNOWN';
   androidVersion: string;
   buildType?: string;
   sourceUrl: string;

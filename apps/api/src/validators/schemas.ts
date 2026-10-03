@@ -160,3 +160,7 @@ export const sourceUpdateSchema = z
   })
   .partial()
   .strict();
+
+export const syncTriggerSchema = z
+  .object({ job: z.enum(['all', 'google-devices', 'lineage-wiki']).default('all'), force: z.boolean().default(false) })
+  .strict();

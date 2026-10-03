@@ -2,18 +2,5 @@ node_modules
 dist
 coverage
 .env
-.env.*
-!.env.example
 *.log
-
-# OS & IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
+.cache

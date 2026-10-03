@@ -5,6 +5,7 @@ import { usePageMeta } from '../lib/hooks';
 import { timeAgo } from '../lib/format';
 import type { Device, Guide, Kernel, Recovery, SupportWithRom, UpdateEvent } from '../lib/types';
 import { CompatibilityTable } from '../components/CompatibilityTable';
+import { EntityActions } from '../components/EntityActions';
 import {
   Badge, EmptyState, ErrorState, ExternalLink, LoadingSkeleton, MetadataGrid, Mono, SectionTitle,
   StatusBadge, SupportBadge, VerificationBadge,
@@ -122,6 +123,7 @@ export default function DeviceDetail() {
       <p className="mb-2 font-mono text-xs tracking-widest text-muted">{d.brand.toUpperCase()}{d.releaseDate ? ` · RELEASED ${new Date(d.releaseDate).getFullYear()}` : ''}</p>
       <h1 className="text-3xl font-semibold tracking-tight">{d.name}</h1>
       <p className="mt-1 font-mono text-lg text-accent">{d.codename}</p>
+      <EntityActions kind="device" id={d._id} name={`${d.name} (${d.codename})`} />
 
       <div role="tablist" aria-label="Device sections" className="mt-8 flex gap-1 overflow-x-auto border-b border-line">
         {TABS.map((t) => (

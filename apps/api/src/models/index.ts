@@ -12,3 +12,4 @@ export { ReportModel } from './Report';
 export { SubmissionModel } from './Submission';
 export { AuditLogModel } from './AuditLog';
 export { RefreshTokenModel } from './RefreshToken';
+export { SyncJobModel } from './SyncJob';

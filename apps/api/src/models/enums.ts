@@ -32,3 +32,5 @@ export const REPORT_REASON = [
 export const REPORT_STATUS = ['OPEN', 'IN_REVIEW', 'RESOLVED', 'DISMISSED'] as const;
 export const SUBMISSION_STATUS = ['PENDING', 'APPROVED', 'REJECTED'] as const;
 export const COMPONENT_STATUS = ['ACTIVE', 'INACTIVE', 'UNKNOWN'] as const;
+export const LIFECYCLE = ['ACTIVE', 'DISCONTINUED', 'UNKNOWN'] as const;
+export const SYNC_STATUS = ['RUNNING', 'SUCCESS', 'SKIPPED', 'FAILED'] as const;

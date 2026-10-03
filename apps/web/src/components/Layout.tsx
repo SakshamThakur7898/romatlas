@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Menu, Moon, Search, Sun, X } from 'lucide-react';
+import { Menu, Moon, Search, Sun, User, X } from 'lucide-react';
 import { useTheme } from '../useTheme';
 import { useSearchStore } from '../lib/hooks';
+import { useAuth } from '../lib/auth';
+import { NotificationBell } from './NotificationBell';
 import { SearchCommand } from './SearchCommand';
 
 const NAV = [
@@ -18,6 +20,7 @@ export function Layout() {
   const { dark, toggle } = useTheme();
   const setSearchOpen = useSearchStore((s) => s.setOpen);
   const [menu, setMenu] = useState(false);
+  const { user, ready } = useAuth();
   const { pathname } = useLocation();
   useEffect(() => setMenu(false), [pathname]);
   const isMac = typeof navigator !== 'undefined' && /mac/i.test(navigator.platform);
@@ -44,6 +47,12 @@ export function Layout() {
               <span className="hidden sm:inline">Search</span>
               <kbd className="hidden font-mono text-[10px] sm:inline">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
             </button>
+            {ready && user && <NotificationBell />}
+            {ready && (user ? (
+              <Link to="/account" aria-label="Account" className="flex h-8 w-8 items-center justify-center rounded border border-line text-muted transition-colors duration-150 hover:text-ink"><User size={14} /></Link>
+            ) : (
+              <Link to="/login" className="hidden h-8 items-center rounded border border-line px-3 text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-ink sm:flex">Sign in</Link>
+            ))}
             <button onClick={toggle} aria-label="Toggle dark mode" className="flex h-8 w-8 items-center justify-center rounded border border-line text-muted transition-colors duration-150 hover:text-ink">
               {dark ? <Sun size={14} /> : <Moon size={14} />}
             </button>
@@ -57,6 +66,7 @@ export function Layout() {
             {NAV.map((n) => (
               <NavLink key={n.to} to={n.to} className={navClass}>{n.label}</NavLink>
             ))}
+            {ready && (user ? <NavLink to="/bookmarks" className={navClass}>Bookmarks</NavLink> : <NavLink to="/login" className={navClass}>Sign in</NavLink>)}
           </nav>
         )}
       </header>
