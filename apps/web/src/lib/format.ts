@@ -40,3 +40,9 @@ export function dayLabel(iso: string): string {
   if (diff === 1) return 'Yesterday';
   return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
+
+export const fmtDateTime = (iso?: string | null) => (iso ? new Date(iso).toLocaleString() : '—');
+
+export function errorMessage(e: unknown): string {
+  return e instanceof Error ? e.message : 'Something went wrong.';
+}

@@ -1,15 +1,17 @@
 import { SyncJobModel } from '../models';
 import { importGoogleDevices } from '../jobs/importers/google.importer';
 import { importLineageWiki } from '../jobs/importers/lineage.importer';
+import { importRomProjects } from '../jobs/importers/romProjects.importer';
 import { AppError } from '../utils/errors';
 import { logger } from '../utils/logger';
 
 export const SYNC_JOBS = {
   'google-devices': importGoogleDevices,
   'lineage-wiki': importLineageWiki,
+  'rom-projects': importRomProjects,
 } as const;
 export type SyncJobName = keyof typeof SYNC_JOBS;
-export const SYNC_ORDER: SyncJobName[] = ['google-devices', 'lineage-wiki'];
+export const SYNC_ORDER: SyncJobName[] = ['google-devices', 'lineage-wiki', 'rom-projects'];
 
 const STALE_RUNNING_MS = 30 * 60_000;
 

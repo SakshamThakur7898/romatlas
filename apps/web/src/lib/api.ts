@@ -62,7 +62,7 @@ export function refreshSession(): Promise<string | null> {
 }
 
 interface RequestInitLite {
-  method?: 'GET' | 'POST' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
   body?: unknown;
 }
 
@@ -133,6 +133,10 @@ export async function apiGet<T>(path: string): Promise<T> {
 
 export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
   return (await request<T>(path, { method: 'POST', body })).data;
+}
+
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  return (await request<T>(path, { method: 'PATCH', body })).data;
 }
 
 export async function apiDelete<T>(path: string): Promise<T> {

@@ -33,6 +33,11 @@ export interface Rom {
   status: 'ACTIVE' | 'INACTIVE' | 'DISCONTINUED' | 'UNKNOWN';
   supportedAndroidVersions: string[];
   maintainer?: string;
+  organization?: string;
+  telegramUrl?: string;
+  discordUrl?: string;
+  statusNote?: string;
+  logo?: string;
 }
 
 interface SupportBase {

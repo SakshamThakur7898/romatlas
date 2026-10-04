@@ -1,0 +1,325 @@
+[
+  {
+    "name": "AetherOS",
+    "github": "https://github.com/Project-AetherOS",
+    "telegram": "https://t.me/aetherosofficial"
+  },
+  {
+    "name": "AetheriaOS",
+    "github": "https://github.com/AetheriaOS",
+    "telegram": "https://t.me/AetheriaOS_AOSP"
+  },
+  {
+    "name": "AICP",
+    "github": "https://github.com/AICP",
+    "discord": "https://discord.gg/nMQUVRD"
+  },
+  {
+    "name": "Alch3myOS",
+    "github": "https://github.com/Alch3myOS"
+  },
+  {
+    "name": "AlphaDroid",
+    "github": "https://github.com/AlphaDroid-Project"
+  },
+  {
+    "name": "Altair ROM",
+    "github": "https://github.com/AltairROM"
+  },
+  {
+    "name": "Android Open Source Project Mirror (unofficial)"
+  },
+  {
+    "name": "Androidfuckery",
+    "github": "https://github.com/androidfuckery"
+  },
+  {
+    "name": "AquariumUI"
+  },
+  {
+    "name": "ASCP"
+  },
+  {
+    "name": "ASCP OSS"
+  },
+  {
+    "name": "AviumUI",
+    "github": "https://github.com/AviumUI"
+  },
+  {
+    "name": "AxionAOSP",
+    "github": "https://github.com/AxionAOSP"
+  },
+  {
+    "name": "AyakaUI",
+    "github": "https://github.com/AyakaUI"
+  },
+  {
+    "name": "BenzeneOS",
+    "github": "https://github.com/BenzeneOS"
+  },
+  {
+    "name": "BlissROMs",
+    "github": "https://github.com/BlissRoms"
+  },
+  {
+    "name": "Bluestacks",
+    "github": "https://github.com/bluestacks"
+  },
+  {
+    "name": "CaesiumOS",
+    "github": "https://github.com/CaesiumOS"
+  },
+  {
+    "name": "CalyxOS",
+    "github": "https://github.com/calyxos"
+  },
+  {
+    "name": "chaoticOS",
+    "github": "https://github.com/chaoticOS"
+  },
+  {
+    "name": "CharaROM",
+    "github": "https://github.com/CharaROMAndroid"
+  },
+  {
+    "name": "CortenaOS",
+    "github": "https://github.com/cortenaos"
+  },
+  {
+    "name": "crDroid",
+    "github": "https://github.com/crdroidandroid"
+  },
+  {
+    "name": "crDroid X",
+    "github": "https://github.com/crdroidx"
+  },
+  {
+    "name": "DarwinAOSP"
+  },
+  {
+    "name": "DerpFest AOSP"
+  },
+  {
+    "name": "Edith-AOSP"
+  },
+  {
+    "name": "euclidOS"
+  },
+  {
+    "name": "EunoiaOS",
+    "github": "https://github.com/EunoiaOS"
+  },
+  {
+    "name": "Evolution X"
+  },
+  {
+    "name": "FeatherOS"
+  },
+  {
+    "name": "Ferrum OS"
+  },
+  {
+    "name": "Fluent-AOSP"
+  },
+  {
+    "name": "Frosty"
+  },
+  {
+    "name": "Fundamental OS"
+  },
+  {
+    "name": "GrapheneOS",
+    "github": "https://github.com/GrapheneOS"
+  },
+  {
+    "name": "Halcyon",
+    "github": "https://github.com/halcyonproject"
+  },
+  {
+    "name": "Halcyon - Calla Lily"
+  },
+  {
+    "name": "halogenOS",
+    "github": "https://github.com/halogenOS"
+  },
+  {
+    "name": "HaloUI"
+  },
+  {
+    "name": "HertzifyOS",
+    "github": "https://github.com/HertzifyOS"
+  },
+  {
+    "name": "IchthysOS"
+  },
+  {
+    "name": "KleeUI",
+    "github": "https://github.com/KleeUI"
+  },
+  {
+    "name": "LightningOS AOSP"
+  },
+  {
+    "name": "LineageOS",
+    "github": "https://github.com/LineageOS"
+  },
+  {
+    "name": "LineageOS x CLO"
+  },
+  {
+    "name": "LineageOS-Ext"
+  },
+  {
+    "name": "LMODroid (LibreMobileOS)",
+    "github": "https://github.com/LMODroid"
+  },
+  {
+    "name": "LOS Modified",
+    "github": "https://github.com/LOSModified"
+  },
+  {
+    "name": "LumineDroid",
+    "github": "https://github.com/LumineDroid"
+  },
+  {
+    "name": "Lunaris-AOSP"
+  },
+  {
+    "name": "MaxxPixel OS"
+  },
+  {
+    "name": "Miku UI"
+  },
+  {
+    "name": "Neoteric-OS"
+  },
+  {
+    "name": "NervAOSP"
+  },
+  {
+    "name": "Nucleus OS"
+  },
+  {
+    "name": "omnirom",
+    "github": "https://github.com/omnirom"
+  },
+  {
+    "name": "Paranoid (AOSPA)",
+    "github": "https://github.com/AOSPA"
+  },
+  {
+    "name": "PenguinOS"
+  },
+  {
+    "name": "PixelBuilds",
+    "github": "https://github.com/PixelBuildsROM"
+  },
+  {
+    "name": "PixelLines",
+    "github": "https://github.com/PixelLines"
+  },
+  {
+    "name": "PixelOS"
+  },
+  {
+    "name": "PixelOS-CLO"
+  },
+  {
+    "name": "PixelOS-GM"
+  },
+  {
+    "name": "Project CiRCLE",
+    "github": "https://github.com/ProjectCiRCLE-ROM"
+  },
+  {
+    "name": "Project Flare"
+  },
+  {
+    "name": "Project Infinity X"
+  },
+  {
+    "name": "Project Mist OS"
+  },
+  {
+    "name": "Project Nirwana",
+    "github": "https://github.com/ProjectNirwana"
+  },
+  {
+    "name": "Project Sakura",
+    "github": "https://github.com/ProjectSakura"
+  },
+  {
+    "name": "Project Shinkai",
+    "github": "https://github.com/Shinkaiprjkt"
+  },
+  {
+    "name": "Pulse-OS"
+  },
+  {
+    "name": "Raven AOSP"
+  },
+  {
+    "name": "RealizeUI"
+  },
+  {
+    "name": "Rising Revived OSS"
+  },
+  {
+    "name": "RuriseOS",
+    "github": "https://github.com/RuriseOS"
+  },
+  {
+    "name": "rwiceAOSP"
+  },
+  {
+    "name": "SHIFTPHONES",
+    "github": "https://github.com/SHIFTPHONES"
+  },
+  {
+    "name": "StatiXOS",
+    "github": "https://github.com/StatiXOS"
+  },
+  {
+    "name": "StatiXOS-Staging"
+  },
+  {
+    "name": "SunOS Project"
+  },
+  {
+    "name": "Superior OS",
+    "github": "https://github.com/SuperiorOS"
+  },
+  {
+    "name": "The Clover Project"
+  },
+  {
+    "name": "The Diva Project"
+  },
+  {
+    "name": "The XPerience Project",
+    "github": "https://github.com/TheXPerienceProject"
+  },
+  {
+    "name": "UOTAN OS"
+  },
+  {
+    "name": "uwuAOSP",
+    "github": "https://github.com/uwuAOSP"
+  },
+  {
+    "name": "VoltageOS"
+  },
+  {
+    "name": "WitAqua"
+  },
+  {
+    "name": "xdroid-oss"
+  },
+  {
+    "name": "YAAP"
+  },
+  {
+    "name": "YAAPex"
+  }
+]

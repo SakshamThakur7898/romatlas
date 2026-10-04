@@ -32,6 +32,7 @@ export default function RomDetail() {
       <h1 className="text-3xl font-semibold tracking-tight">{r.name}</h1>
       <div className="mt-3 flex items-center gap-2"><Badge>{r.officialStatus}</Badge><StatusBadge status={r.status} /></div>
       {r.description && <p className="mt-4 max-w-2xl text-sm text-muted">{r.description}</p>}
+      {r.statusNote && <p className="mt-3 max-w-2xl font-mono text-xs text-muted">{r.statusNote}</p>}
       <EntityActions kind="rom" id={r._id} name={r.name} />
 
       <section className="mt-10">
@@ -41,6 +42,8 @@ export default function RomDetail() {
             { label: 'Website', value: r.website ? <ExternalLink href={r.website}>Official website</ExternalLink> : undefined },
             { label: 'Repository', value: r.repository ? <ExternalLink href={r.repository}>Source code</ExternalLink> : undefined },
             { label: 'Documentation', value: r.documentation ? <ExternalLink href={r.documentation}>Documentation</ExternalLink> : undefined },
+            { label: 'Telegram', value: r.telegramUrl ? <ExternalLink href={r.telegramUrl}>Community chat</ExternalLink> : undefined },
+            { label: 'Discord', value: r.discordUrl ? <ExternalLink href={r.discordUrl}>Community server</ExternalLink> : undefined },
             { label: 'Maintainer', value: r.maintainer },
             { label: 'Android', value: r.supportedAndroidVersions.length ? r.supportedAndroidVersions.join(', ') : undefined },
           ]}

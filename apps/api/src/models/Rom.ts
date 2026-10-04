@@ -15,6 +15,12 @@ const romSchema = new Schema(
     officialStatus: { type: String, enum: OFFICIAL_STATUS, default: 'UNKNOWN' },
     supportedAndroidVersions: { type: [String], default: [] },
     maintainer: { type: String, trim: true },
+    organization: { type: String, trim: true },
+    telegramUrl: { ...httpUrl },
+    discordUrl: { ...httpUrl },
+    // Why `status` has its value (e.g. which GitHub signal it was derived from).
+    statusNote: { type: String, trim: true, maxlength: 500 },
+    lastCheckedAt: Date,
     status: { type: String, enum: ROM_STATUS, default: 'UNKNOWN' },
     sourceId: { type: Schema.Types.ObjectId, ref: 'Source' },
   },

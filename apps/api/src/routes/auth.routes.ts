@@ -2,6 +2,7 @@ import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { register, login, logout, refresh, me } from '../controllers/auth.controller';
 import { authenticate } from '../middleware/auth';
+import { requireTrustedOrigin } from '../middleware/trustedOrigin';
 import { env } from '../config/env';
 
 export const authRouter = Router();
@@ -17,6 +18,6 @@ const authLimiter = rateLimit({
 
 authRouter.post('/register', authLimiter, register);
 authRouter.post('/login', authLimiter, login);
-authRouter.post('/refresh', authLimiter, refresh);
-authRouter.post('/logout', logout);
+authRouter.post('/refresh', requireTrustedOrigin, authLimiter, refresh);
+authRouter.post('/logout', requireTrustedOrigin, logout);
 authRouter.get('/me', authenticate, me);

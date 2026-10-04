@@ -10,6 +10,7 @@ import {
   paginationQuerySchema, reportResolveSchema, roleChangeSchema, sourceUpdateSchema, submissionReviewSchema, syncTriggerSchema,
 } from '../validators/schemas';
 import { writeAudit } from '../services/audit.service';
+import { applySubmission, parseSubmissionPayload } from '../services/submission.service';
 import { runAllSyncJobs, runSyncJob, SYNC_ORDER } from '../services/sync.service';
 import { logger } from '../utils/logger';
 
@@ -59,11 +60,27 @@ export const updateUserRole: RequestHandler = async (req, res) => {
 export const listReports: RequestHandler = async (req, res) => {
   const { page, limit, status } = paginationQuerySchema.parse(req.query);
   const filter = status ? { status } : {};
-  const [data, total] = await Promise.all([
+  const [rows, total] = await Promise.all([
     ReportModel.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit)
       .populate('userId', 'name username').lean(),
     ReportModel.countDocuments(filter),
   ]);
+  // Resolve DEVICE/ROM targets so moderators see names and can jump to the page.
+  const ids = (type: string) => rows.filter((r) => r.targetType === type).map((r) => r.targetId);
+  const [devices, roms] = await Promise.all([
+    DeviceModel.find({ _id: { $in: ids('DEVICE') } }).select('name brandSlug slug codename').lean(),
+    RomModel.find({ _id: { $in: ids('ROM') } }).select('name slug').lean(),
+  ]);
+  const deviceById = new Map(devices.map((d) => [String(d._id), d]));
+  const romById = new Map(roms.map((r) => [String(r._id), r]));
+  const data = rows.map((r) => {
+    const d = r.targetType === 'DEVICE' ? deviceById.get(String(r.targetId)) : undefined;
+    const rom = r.targetType === 'ROM' ? romById.get(String(r.targetId)) : undefined;
+    const target = d
+      ? { name: `${d.name} (${d.codename})`, path: `/devices/${d.brandSlug}/${d.slug}` }
+      : rom ? { name: rom.name, path: `/roms/${rom.slug}` } : null;
+    return { ...r, target };
+  });
   res.json(paginate(data, total, page, limit));
 };
 
@@ -98,23 +115,39 @@ export const listSubmissions: RequestHandler = async (req, res) => {
 
 export const reviewSubmission: RequestHandler = async (req, res) => {
   const { status, reviewNotes } = submissionReviewSchema.parse(req.body);
-  // Only PENDING submissions can be decided, atomically, so two moderators can't both act.
-  const submission = await SubmissionModel.findOneAndUpdate(
-    { _id: req.params.id, status: 'PENDING' },
+  const existing = await SubmissionModel.findById(req.params.id).lean();
+  if (!existing) throw new AppError(404, 'NOT_FOUND', 'Submission not found');
+  if (existing.status !== 'PENDING') throw new AppError(409, 'ALREADY_REVIEWED', 'Submission has already been reviewed');
+
+  // Validate before claiming, so an invalid payload leaves the submission pending instead of half-approved.
+  const parsed = status === 'APPROVED' ? parseSubmissionPayload(existing.type as string, existing.payload) : null;
+
+  // Atomic claim: only one moderator can decide a submission.
+  const claimed = await SubmissionModel.findOneAndUpdate(
+    { _id: existing._id, status: 'PENDING' },
     { status, reviewNotes, reviewedBy: res.locals.userId, reviewedAt: new Date() },
     { new: true },
   ).lean();
-  if (!submission) {
-    const exists = await SubmissionModel.exists({ _id: req.params.id });
-    throw exists
-      ? new AppError(409, 'ALREADY_REVIEWED', 'Submission has already been reviewed')
-      : new AppError(404, 'NOT_FOUND', 'Submission not found');
+  if (!claimed) throw new AppError(409, 'ALREADY_REVIEWED', 'Submission has already been reviewed');
+
+  let created: { targetType: string; targetId: string } | null = null;
+  if (parsed) {
+    try {
+      created = await applySubmission(parsed);
+    } catch (err) {
+      // e.g. duplicate codename/slug: put it back in the queue so nothing is lost, then report the cause.
+      await SubmissionModel.updateOne(
+        { _id: existing._id },
+        { status: 'PENDING', $unset: { reviewedBy: 1, reviewedAt: 1, reviewNotes: 1 } },
+      );
+      throw err;
+    }
   }
   await writeAudit({
-    actorId: res.locals.userId, action: 'SUBMISSION_REVIEWED', targetType: 'Submission', targetId: String(submission._id),
-    previousValue: { status: 'PENDING' }, newValue: { status },
+    actorId: res.locals.userId, action: 'SUBMISSION_REVIEWED', targetType: 'Submission', targetId: String(claimed._id),
+    previousValue: { status: 'PENDING' }, newValue: { status, created },
   });
-  res.json(ok(submission));
+  res.json(ok({ ...claimed, created }));
 };
 
 export const listSources: RequestHandler = async (req, res) => {
@@ -166,10 +199,11 @@ export const triggerSync: RequestHandler = async (req, res) => {
 };
 
 export const syncHistory: RequestHandler = async (req, res) => {
-  const { page, limit } = paginationQuerySchema.parse(req.query);
+  const { page, limit, status } = paginationQuerySchema.parse(req.query);
+  const filter = status ? { status } : {};
   const [data, total] = await Promise.all([
-    SyncJobModel.find().sort({ startedAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
-    SyncJobModel.estimatedDocumentCount(),
+    SyncJobModel.find(filter).sort({ startedAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+    SyncJobModel.countDocuments(filter),
   ]);
   res.json(paginate(data, total, page, limit));
 };

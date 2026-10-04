@@ -8,7 +8,7 @@ Phase 3 (auth) and the API layer are complete and hardened: refresh-token rotati
 Phase 2 complete: Mongoose models, indexes, dev seed (`npm run seed -w apps/api`, `--force` to replace). Phase 1 complete: monorepo, API foundation (Express 5, Zod env, Helmet, CORS, rate limit, request IDs, standard error format), React/Vite/Tailwind shell with light/dark theme, CI.
 
 ## Data
-Real data comes from importers, see `docs/DATA_SOURCES.md`. After the API can reach MongoDB: `npm run sync -w apps/api -- all`.
+Real data comes from importers (Google devices, LineageOS wiki, ~90 ROM projects via GitHub), see `docs/DATA_SOURCES.md`. After the API can reach MongoDB: `npm run sync -w apps/api -- all`.
 
 ## Run locally
 ```bash

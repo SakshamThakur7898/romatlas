@@ -36,8 +36,9 @@ export const REFRESH_COOKIE_MAX_SEC = 60 * 60 * 24 * 7;
 export function cookieOptions(maxAgeSec: number) {
   return {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'lax' as const,
+    // SameSite=None is only honoured by browsers together with Secure.
+    secure: env.NODE_ENV === 'production' || env.COOKIE_SAME_SITE === 'none',
+    sameSite: env.COOKIE_SAME_SITE,
     maxAge: maxAgeSec * 1000,
   };
 }

@@ -70,7 +70,7 @@ export const reportSchema = z.object({
   description: z.string().trim().max(2000).optional(),
 });
 export const submissionSchema = z.object({
-  type: z.enum(['DEVICE', 'ROM', 'DEVICE_ROM_SUPPORT', 'RECOVERY', 'KERNEL', 'GUIDE']),
+  type: z.enum(['DEVICE', 'ROM', 'GUIDE']),
   payload: z.record(z.unknown()),
   notes: z.string().trim().max(2000).optional(),
 });
@@ -162,5 +162,5 @@ export const sourceUpdateSchema = z
   .strict();
 
 export const syncTriggerSchema = z
-  .object({ job: z.enum(['all', 'google-devices', 'lineage-wiki']).default('all'), force: z.boolean().default(false) })
+  .object({ job: z.enum(['all', 'google-devices', 'lineage-wiki', 'rom-projects']).default('all'), force: z.boolean().default(false) })
   .strict();

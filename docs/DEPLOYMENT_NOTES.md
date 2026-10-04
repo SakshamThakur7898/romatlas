@@ -8,3 +8,13 @@ on the **same site** as the page (local dev uses the Vite proxy for this). If th
 3. Change the cookie to `SameSite=None; Secure` in `utils/jwt.ts` and tighten CORS and CSRF protection.
 
 Set distinct `JWT_SECRET` and `JWT_REFRESH_SECRET` (>= 32 chars) in production; the API refuses to start otherwise.
+
+## Render: two separate services (what is deployed today)
+`*.onrender.com` is a public suffix, so `romatlas-frontend.onrender.com` and the API are **different sites**.
+Set on the API service: `COOKIE_SAME_SITE=none`, `CLIENT_ORIGIN=https://<frontend>.onrender.com` (no trailing slash),
+`NODE_ENV=production`, `MONGODB_URI`, and two distinct 32+ char JWT secrets. `/auth/refresh` and `/auth/logout`
+reject requests whose Origin is not `CLIENT_ORIGIN`. Browsers that block third-party cookies can still break
+session restore; the robust fix is a Static Site rewrite of `/api/*` to the API (then drop `VITE_API_URL`
+and use `COOKIE_SAME_SITE=lax`).
+
+Never put credentials in source files or defaults. Production refuses to start without `MONGODB_URI`.
