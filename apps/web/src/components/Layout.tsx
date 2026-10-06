@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Menu, Moon, Search, Sun, User, X } from 'lucide-react';
 import { useTheme } from '../useTheme';
 import { useSearchStore } from '../lib/hooks';
-import { useAuth } from '../lib/auth';
+import { isStaff, useAuth } from '../lib/auth';
 import { NotificationBell } from './NotificationBell';
 import { SearchCommand } from './SearchCommand';
 
@@ -47,6 +47,7 @@ export function Layout() {
               <span className="hidden sm:inline">Search</span>
               <kbd className="hidden font-mono text-[10px] sm:inline">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
             </button>
+            {ready && isStaff(user) && <Link to="/admin" className="hidden h-8 items-center rounded border border-line px-3 font-mono text-xs text-accent transition-colors duration-150 hover:border-accent sm:flex">ADMIN</Link>}
             {ready && user && <NotificationBell />}
             {ready && (user ? (
               <Link to="/account" aria-label="Account" className="flex h-8 w-8 items-center justify-center rounded border border-line text-muted transition-colors duration-150 hover:text-ink"><User size={14} /></Link>

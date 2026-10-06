@@ -115,6 +115,9 @@ export const romInputSchema = z
     officialStatus: z.enum(OFFICIAL_STATUS),
     supportedAndroidVersions: z.array(z.string().max(20)).max(30),
     maintainer: z.string().trim().max(120),
+    organization: z.string().trim().max(80),
+    telegramUrl: httpUrl,
+    discordUrl: httpUrl,
     status: z.enum(ROM_STATUS),
     sourceId: objectIdSchema,
   })
