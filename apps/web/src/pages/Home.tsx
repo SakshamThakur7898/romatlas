@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
+import { Pause, Play, Search } from 'lucide-react';
 import { apiGet } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { usePageMeta, useSearchStore } from '../lib/hooks';
@@ -45,36 +45,71 @@ function CompassMark() {
   );
 }
 
-/** Plays only while visible; stays paused for people who prefer reduced motion. */
+/**
+ * Plays the scene while it is visible. Visitors whose system asks for reduced motion (on Windows this includes
+ * "Animation effects" being switched off) get a paused first frame, and a visible Play button to opt in.
+ * If the browser blocks autoplay, the button shows Play instead of silently leaving a still image.
+ */
 function useSceneVideo() {
   const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const userPaused = useRef(false);
+
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+    video.muted = true; // React sets this as a property only; some browsers need it before autoplay
+    video.setAttribute('muted', '');
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      userPaused.current = true;
       video.removeAttribute('autoplay');
       video.pause();
-      return;
+    } else {
+      video.play().catch(() => undefined);
     }
-    if (!('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => undefined);
-        else video.pause();
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(video);
-    return () => io.disconnect();
+
+    let io: IntersectionObserver | undefined;
+    if ('IntersectionObserver' in window) {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !userPaused.current) video.play().catch(() => undefined);
+          else if (!entry.isIntersecting) video.pause();
+        },
+        { threshold: 0.15 },
+      );
+      io.observe(video);
+    }
+    return () => {
+      io?.disconnect();
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
+    };
   }, []);
-  return ref;
+
+  const toggle = () => {
+    const video = ref.current;
+    if (!video) return;
+    if (video.paused) {
+      userPaused.current = false;
+      video.play().catch(() => undefined);
+    } else {
+      userPaused.current = true;
+      video.pause();
+    }
+  };
+  return { ref, playing, toggle };
 }
 
 export default function Home() {
   usePageMeta('ROMAtlas', 'Find ROMs, recoveries, guides and device compatibility from source-linked information.');
   const setOpen = useSearchStore((s) => s.setOpen);
   const user = useAuth((s) => s.user);
-  const videoRef = useSceneVideo();
+  const { ref: videoRef, playing, toggle } = useSceneVideo();
   const { data } = useQuery({ queryKey: ['stats'], queryFn: () => apiGet<PublicStats>('/stats') });
 
   return (
@@ -112,6 +147,11 @@ export default function Home() {
           </nav>
           <p className="scene__copy">© {new Date().getFullYear()} ROMAtlas. Links to original sources; hosts no ROM files.</p>
         </div>
+
+        <button className="scene__toggle" onClick={toggle} aria-label={playing ? 'Pause animation' : 'Play animation'}>
+          {playing ? <Pause size={14} aria-hidden /> : <Play size={14} aria-hidden />}
+          {!playing && <span>Play</span>}
+        </button>
       </section>
 
       <section className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4" aria-label="Index statistics">

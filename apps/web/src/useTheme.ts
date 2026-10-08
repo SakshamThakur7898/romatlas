@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 
+/** Light is the default; dark only when the visitor has chosen it with the toggle. */
 function initialDark(): boolean {
-  const saved = localStorage.getItem('theme');
-  if (saved) return saved === 'dark';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  try {
+    return localStorage.getItem('theme') === 'dark';
+  } catch {
+    return false;
+  }
 }
 
 export function useTheme() {
