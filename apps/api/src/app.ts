@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { env } from './config/env';
+import { limited } from './utils/rateLimit';
 import { requestId } from './middleware/requestId';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import { apiRouter } from './routes';
@@ -19,7 +20,7 @@ export function createApp() {
   app.use(cookieParser());
   app.use(
     '/api',
-    rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: 'draft-7', legacyHeaders: false }),
+    rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: 'draft-7', legacyHeaders: false, message: limited() }),
     apiRouter
   );
 

@@ -5,7 +5,7 @@ import { useAuth } from '../../lib/auth';
 
 const SECTIONS: { label?: string; items: { to: string; label: string; end?: boolean; adminOnly?: boolean }[] }[] = [
   { items: [{ to: '/admin', label: 'Overview', end: true }] },
-  { label: 'Content', items: [{ to: '/admin/devices', label: 'Devices' }, { to: '/admin/roms', label: 'ROMs' }, { to: '/admin/sources', label: 'Sources' }] },
+  { label: 'Content', items: [{ to: '/admin/devices', label: 'Devices' }, { to: '/admin/roms', label: 'ROMs' }, { to: '/admin/guides', label: 'Guides' }, { to: '/admin/sources', label: 'Sources' }] },
   { label: 'Moderation', items: [{ to: '/admin/submissions', label: 'Submissions' }, { to: '/admin/reports', label: 'Reports' }] },
   { label: 'System', items: [
     { to: '/admin/sync', label: 'Sync Jobs' }, { to: '/admin/errors', label: 'Errors' },

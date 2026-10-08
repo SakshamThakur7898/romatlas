@@ -105,11 +105,24 @@ export const resolveReport: RequestHandler = async (req, res) => {
 export const listSubmissions: RequestHandler = async (req, res) => {
   const { page, limit, status } = paginationQuerySchema.parse(req.query);
   const filter = status ? { status } : {};
-  const [data, total] = await Promise.all([
+  const [rows, total] = await Promise.all([
     SubmissionModel.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit)
       .populate('userId', 'name username').lean(),
     SubmissionModel.countDocuments(filter),
   ]);
+  // Name the device/ROM a submission refers to, so moderators don't have to read raw ids.
+  const payloadOf = (r: (typeof rows)[number]) => (r.payload ?? {}) as Record<string, unknown>;
+  const ids = (key: string) => rows.map((r) => payloadOf(r)[key]).filter((v): v is string => typeof v === 'string');
+  const [devices, roms] = await Promise.all([
+    DeviceModel.find({ _id: { $in: ids('deviceId') } }).select('name codename').lean(),
+    RomModel.find({ _id: { $in: ids('romId') } }).select('name').lean(),
+  ]);
+  const deviceName = new Map(devices.map((d) => [String(d._id), `${d.name} (${d.codename})`]));
+  const romName = new Map(roms.map((r) => [String(r._id), r.name]));
+  const data = rows.map((r) => ({
+    ...r,
+    context: { device: deviceName.get(String(payloadOf(r).deviceId)), rom: romName.get(String(payloadOf(r).romId)) },
+  }));
   res.json(paginate(data, total, page, limit));
 };
 
@@ -204,6 +217,18 @@ export const syncHistory: RequestHandler = async (req, res) => {
   const [data, total] = await Promise.all([
     SyncJobModel.find(filter).sort({ startedAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
     SyncJobModel.countDocuments(filter),
+  ]);
+  res.json(paginate(data, total, page, limit));
+};
+
+/** All guides including drafts and outdated ones (the public list shows published only). */
+export const listAllGuides: RequestHandler = async (req, res) => {
+  const { page, limit, status } = paginationQuerySchema.parse(req.query);
+  const filter = status ? { status } : {};
+  const [data, total] = await Promise.all([
+    GuideModel.find(filter).select('-content').sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit)
+      .populate('deviceId', 'name codename brandSlug slug').lean(),
+    GuideModel.countDocuments(filter),
   ]);
   res.json(paginate(data, total, page, limit));
 };

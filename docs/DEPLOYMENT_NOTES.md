@@ -18,3 +18,9 @@ session restore; the robust fix is a Static Site rewrite of `/api/*` to the API 
 and use `COOKIE_SAME_SITE=lax`).
 
 Never put credentials in source files or defaults. Production refuses to start without `MONGODB_URI`.
+
+## AI assistant and submissions
+- `/assistant` calls NVIDIA NIM through the API. Set `NIM_API_KEY` (and optionally `NIM_MODEL`) on the API service,
+  otherwise the assistant answers "not configured". It requires sign-in and is limited to 8 questions/minute per user.
+- Any signed-in user can submit suggestions (20/hour, max 20 pending). Nothing is published until a moderator approves
+  it in Admin -> Submissions; approved ROM builds are saved as COMMUNITY_REPORTED, never VERIFIED.

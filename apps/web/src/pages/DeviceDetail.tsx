@@ -197,7 +197,7 @@ export default function DeviceDetail() {
               <ul className="divide-y divide-line border-y border-line">
                 {(guides.data ?? []).map((g) => (
                   <li key={g._id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
-                    <span><span className="font-medium">{g.title}</span><span className="block text-xs text-muted">{g.category.replace(/_/g, ' ')}{g.difficulty ? ` · ${g.difficulty}` : ''}{g.estimatedTime ? ` · ${g.estimatedTime}` : ''}</span></span>
+                    <span><Link to={`/guides/${d.slug}/${g.slug}`} className="font-medium hover:text-accent">{g.title}</Link><span className="block text-xs text-muted">{g.category.replace(/_/g, ' ')}{g.difficulty ? ` · ${g.difficulty}` : ''}{g.estimatedTime ? ` · ${g.estimatedTime}` : ''}</span></span>
                     <span className="flex items-center gap-3">
                       {g.lastReviewedAt && <Badge>Reviewed {timeAgo(g.lastReviewedAt)}</Badge>}
                       <ExternalLink href={g.sourceUrl}>Original</ExternalLink>

@@ -4,6 +4,7 @@ import { register, login, logout, refresh, me } from '../controllers/auth.contro
 import { authenticate } from '../middleware/auth';
 import { requireTrustedOrigin } from '../middleware/trustedOrigin';
 import { env } from '../config/env';
+import { limited } from '../utils/rateLimit';
 
 export const authRouter = Router();
 
@@ -13,6 +14,7 @@ const authLimiter = rateLimit({
   limit: 30,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
+  message: limited('Too many attempts. Please wait a few minutes.'),
   skip: () => env.NODE_ENV === 'test',
 });
 

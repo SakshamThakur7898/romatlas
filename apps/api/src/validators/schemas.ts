@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {
   DIFFICULTY, GUIDE_CATEGORY, GUIDE_STATUS, OFFICIAL_STATUS, REPORT_REASON, ROLES,
-  ROM_STATUS, SOURCE_STATUS, SOURCE_TYPE, RELIABILITY_TYPE, TARGET_TYPE, UPDATE_TYPE,
+  ROM_STATUS, SOURCE_STATUS, BUILD_TYPE, SOURCE_TYPE, RELIABILITY_TYPE, TARGET_TYPE, UPDATE_TYPE,
 } from '../models/enums';
 
 export const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id');
@@ -70,7 +70,7 @@ export const reportSchema = z.object({
   description: z.string().trim().max(2000).optional(),
 });
 export const submissionSchema = z.object({
-  type: z.enum(['DEVICE', 'ROM', 'GUIDE']),
+  type: z.enum(['DEVICE', 'ROM', 'GUIDE', 'DEVICE_ROM_SUPPORT', 'RECOVERY', 'KERNEL']),
   payload: z.record(z.unknown()),
   notes: z.string().trim().max(2000).optional(),
 });
@@ -166,4 +166,44 @@ export const sourceUpdateSchema = z
 
 export const syncTriggerSchema = z
   .object({ job: z.enum(['all', 'google-devices', 'lineage-wiki', 'rom-projects']).default('all'), force: z.boolean().default(false) })
+  .strict();
+
+// ── Community-submitted additions. OFFICIAL support comes from official sources only, never from users. ──
+const communitySupportType = z.enum(['COMMUNITY', 'UNOFFICIAL', 'UNKNOWN']);
+export const supportInputSchema = z
+  .object({
+    deviceId: objectIdSchema,
+    romId: objectIdSchema,
+    supportType: communitySupportType,
+    androidVersion: z.string().trim().min(1).max(20),
+    buildType: z.enum(BUILD_TYPE).optional(),
+    sourceUrl: httpUrl,
+    downloadUrl: httpUrl.optional(),
+    documentationUrl: httpUrl.optional(),
+    maintainer: z.string().trim().max(120).optional(),
+    notes: z.string().trim().max(2000).optional(),
+    knownIssues: z.array(z.string().trim().min(1).max(300)).max(20).optional(),
+  })
+  .strict();
+export const recoveryInputSchema = z
+  .object({
+    deviceId: objectIdSchema,
+    name: z.string().trim().min(1).max(80),
+    version: z.string().trim().max(40).optional(),
+    supportType: communitySupportType,
+    sourceUrl: httpUrl,
+    downloadUrl: httpUrl.optional(),
+    notes: z.string().trim().max(2000).optional(),
+  })
+  .strict();
+export const kernelInputSchema = z
+  .object({
+    deviceId: objectIdSchema,
+    name: z.string().trim().min(1).max(80),
+    version: z.string().trim().max(40).optional(),
+    sourceRepository: httpUrl,
+    downloadUrl: httpUrl.optional(),
+    maintainer: z.string().trim().max(120).optional(),
+    androidVersion: z.string().trim().max(20).optional(),
+  })
   .strict();

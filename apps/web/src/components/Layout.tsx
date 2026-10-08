@@ -10,7 +10,9 @@ import { SearchCommand } from './SearchCommand';
 const NAV = [
   { to: '/devices', label: 'Devices' },
   { to: '/roms', label: 'ROMs' },
+  { to: '/guides', label: 'Guides' },
   { to: '/updates', label: 'Updates' },
+  { to: '/assistant', label: 'Assistant' },
 ];
 
 const navClass = ({ isActive }: { isActive: boolean }) =>

@@ -22,7 +22,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-export function ReportDialog({ targetType, targetId, label, onClose }: { targetType: 'DEVICE' | 'ROM'; targetId: string; label: string; onClose: () => void }) {
+export function ReportDialog({ targetType, targetId, label, onClose }: { targetType: 'DEVICE' | 'ROM' | 'GUIDE'; targetId: string; label: string; onClose: () => void }) {
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver<FormValues>(schema) });
   const [sent, setSent] = useState(false);
 

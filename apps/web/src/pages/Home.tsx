@@ -141,7 +141,8 @@ export default function Home() {
             <ul>
               <li><Link to="/devices">Devices</Link></li>
               <li><Link to="/roms">ROMs</Link></li>
-              <li><Link to="/updates">Updates</Link></li>
+              <li><Link to="/guides">Guides</Link></li>
+              <li><Link to="/assistant">Assistant</Link></li>
               <li>{user ? <Link to="/account">Account</Link> : <Link to="/login">Sign in</Link>}</li>
             </ul>
           </nav>

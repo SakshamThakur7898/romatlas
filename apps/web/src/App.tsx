@@ -19,6 +19,9 @@ const Devices = lazy(() => import('./pages/Devices'));
 const DeviceDetail = lazy(() => import('./pages/DeviceDetail'));
 const Roms = lazy(() => import('./pages/Roms'));
 const RomDetail = lazy(() => import('./pages/RomDetail'));
+const Guides = lazy(() => import('./pages/Guides'));
+const GuidePage = lazy(() => import('./pages/GuidePage'));
+const Assistant = lazy(() => import('./pages/Assistant'));
 const Updates = lazy(() => import('./pages/Updates'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -26,6 +29,7 @@ const Account = lazy(() => import('./pages/Account'));
 const Bookmarks = lazy(() => import('./pages/Bookmarks'));
 const AdminOverview = lazy(() => import('./pages/admin/Overview'));
 const AdminDevices = lazy(() => import('./pages/admin/Devices'));
+const AdminGuides = lazy(() => import('./pages/admin/Guides'));
 const AdminRoms = lazy(() => import('./pages/admin/Roms'));
 const AdminSources = lazy(() => import('./pages/admin/Sources'));
 const AdminSubmissions = lazy(() => import('./pages/admin/Submissions'));
@@ -46,6 +50,7 @@ export default function App() {
           <Route index element={<AdminOverview />} />
           <Route path="devices" element={<AdminDevices />} />
           <Route path="roms" element={<AdminRoms />} />
+          <Route path="guides" element={<AdminGuides />} />
           <Route path="sources" element={<AdminSources />} />
           <Route path="submissions" element={<AdminSubmissions />} />
           <Route path="reports" element={<AdminReports />} />
@@ -61,6 +66,9 @@ export default function App() {
           <Route path="roms" element={<Roms />} />
           <Route path="roms/:slug" element={<RomDetail />} />
           <Route path="updates" element={<Updates />} />
+          <Route path="guides" element={<Guides />} />
+          <Route path="guides/:deviceSlug/:guideSlug" element={<GuidePage />} />
+          <Route path="assistant" element={<RequireAuth><Assistant /></RequireAuth>} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="account" element={<RequireAuth><Account /></RequireAuth>} />

@@ -179,14 +179,15 @@ body {
 .scene__toggle:hover, .scene__toggle:focus-visible { border-color: var(--accent); color: var(--ink); outline: none; }
 
 @media (max-width: 900px) {
-  .scene__nav ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 16px; row-gap: 4px; max-width: 560px; margin: 0 auto; }
+  .scene__nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 12px; row-gap: 4px; max-width: 600px; margin: 0 auto; }
   .scene__nav li { justify-content: center; }
   .scene__nav li + li::before { display: none; }
   .scene__nav a { padding: 8px 4px; font-size: 15px; }
 }
 @media (max-width: 600px) {
   .scene__content { padding: 28px 16px 0; }
-  .scene__nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 320px; }
+  .scene__nav ul { display: flex; flex-wrap: wrap; justify-content: center; max-width: 320px; }
+  .scene__nav li { flex: 0 0 50%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .scene__nav a::after, .scene__search, .scene__toggle { transition: none; }

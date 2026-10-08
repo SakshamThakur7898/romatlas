@@ -4,7 +4,7 @@ import {
   listReports, resolveReport,
   listSubmissions, reviewSubmission,
   listSources, updateSource,
-  listAuditLogs, triggerSync, syncHistory
+  listAuditLogs, triggerSync, syncHistory, listAllGuides
 } from '../controllers/admin.controller';
 import { authenticate, requireRole } from '../middleware/auth';
 import { objectIdParam } from '../middleware/params';
@@ -32,3 +32,4 @@ adminRouter.get('/audit-logs', requireRole('ADMIN'), listAuditLogs);
 
 adminRouter.post('/sync', requireRole('ADMIN'), triggerSync);
 adminRouter.get('/sync/history', syncHistory);
+adminRouter.get('/guides', listAllGuides);

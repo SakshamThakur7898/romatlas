@@ -10,9 +10,16 @@ import { JsonBlock, PageHeader } from '../../components/admin/AdminUi';
 interface Submission {
   _id: string; type: string; status: string; payload: Record<string, unknown>; notes?: string; reviewNotes?: string; createdAt: string;
   userId?: { name: string; username: string } | null;
+  context?: { device?: string; rom?: string };
 }
 const STATUSES = ['PENDING', 'APPROVED', 'REJECTED'];
-const label = (s: Submission) => String(s.payload.name ?? s.payload.title ?? s.type);
+const TYPE_LABEL: Record<string, string> = { DEVICE_ROM_SUPPORT: 'ROM SUPPORT' };
+const label = (s: Submission) => {
+  const c = s.context;
+  if (s.type === 'DEVICE_ROM_SUPPORT') return `${c?.rom ?? 'ROM'} on ${c?.device ?? 'device'}`;
+  const own = String(s.payload.name ?? s.payload.title ?? s.type);
+  return c?.device ? `${own} for ${c.device}` : own;
+};
 
 function Row({ s }: { s: Submission }) {
   const qc = useQueryClient();
@@ -26,7 +33,7 @@ function Row({ s }: { s: Submission }) {
   return (
     <li className="rounded border border-line bg-surface p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-sm"><Badge>{s.type}</Badge><span className="font-medium">{label(s)}</span>
+        <div className="flex items-center gap-2 text-sm"><Badge>{TYPE_LABEL[s.type] ?? s.type}</Badge><span className="font-medium">{label(s)}</span>
           <span className="text-xs text-muted">by @{s.userId?.username ?? 'unknown'} · {timeAgo(s.createdAt)}</span></div>
         <div className="flex gap-1">
           <button className={buttonClass} onClick={() => setOpen((o) => !o)}>{open ? 'Hide' : 'View'} payload</button>
@@ -46,7 +53,7 @@ function Row({ s }: { s: Submission }) {
       {review.isError && !confirm && <p role="alert" className="mt-2 text-sm text-accent">{errorMessage(review.error)}</p>}
       {confirm && (
         <ConfirmDialog title="Approve submission" confirmLabel="Approve and create" pending={review.isPending} error={review.error}
-          message={<>This creates a real {s.type.toLowerCase()} record from the payload{s.type === 'GUIDE' ? ' and publishes it' : ''}. If it fails (for example a duplicate codename), the submission stays pending.</>}
+          message={<>This creates a real record from the payload{s.type === 'GUIDE' ? ' and publishes it' : s.type === 'DEVICE_ROM_SUPPORT' ? ', marked community-reported (never verified)' : ''}. If it fails (for example a duplicate codename), the submission stays pending.</>}
           onConfirm={() => review.mutate('APPROVED')} onCancel={() => setConfirm(false)} />
       )}
     </li>
